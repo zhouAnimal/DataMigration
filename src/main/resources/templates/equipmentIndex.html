@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+<title>我的网页</title>
+<link rel="shortcut icon" th:href="@{/img/logo.png}"
+	href="/images/logo-mini.png" type="images/x-icon" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="description" content="" />
+<!--  引入CSS文件-->
+<link rel="stylesheet" th:href="@{/css/head.css}" />
+<link rel="stylesheet" th:href="@{/css/kkpager.css}" />
+</head>
+<body>
+	<!--  menu begin-->
+	<div>
+		<th:block th:replace="pageFrame/topMenu :: copy"></th:block>
+	</div>
+	<div style="width: 50%; margin: 0 auto;">
+		<!-- 查询表单 -->
+		<div align=center>
+			<form action="allEquipment" method="post" id="equipmentSearchForm"
+				th:object="${equipmentSearchForm}">
+				<table class="searchFormTable">
+					<tr>
+						<td>eId</td>
+						<td><input type="text" name="eId" th:field="*{eId}" /></td>
+						<td>eName</td>
+						<td><input type="text" name="eName"  th:field="*{eName}"/></td>
+						<td>eNameA</td>
+						<td><input type="text" name="eNameA" th:field="*{eNameA}" /></td>
+					</tr>
+					<tr>
+						<td>eNote</td>
+						<td><input type="text" name="eNote" th:field="*{eNote}" /></td>
+						<td>eType</td>
+						<td><input type="text" name="eType" th:field="*{eType}" /></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td colspan="6">
+							<!--  <input class="btn_reset" type="reset" value="重置"/> --> <input
+							class="btn_submit btn_reset" type="submit" value="查询" />
+						</td>
+					</tr>
+				</table>
+				<input type="hidden" name="pno" id="fpno" />
+			</form>
+		</div>
+		<!--  显示数据-->
+		<div align=center>
+		
+			<table>
+				<thead>
+					<th>eId</th>
+					<th>eName</th>
+					<th>eNameA</th>
+					<th>eNote</th>
+					<th>eType</th>
+				</thead>
+				<tbody>
+					<tr th:each="e:${pEquipment.content}">
+						<!--判断成绩-->
+						<td th:text="${e.eId}"></td>
+						<td th:text="${e.eName}"></td>
+						<td th:text="${e.eNameA}"></td>
+						<td th:text="${e.eNote}"></td>
+						<td th:text="${e.eType}"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div id="kkpager" style="width: 97%; margin: 0 auto;"></div>
+
+	</div>
+	<!--  引入JS文件-->
+	<script th:src="@{/js/jquery-1.12.4.min.js}"></script>
+	<script th:src="@{/js/kkpager.min.js}"></script>
+	<script type="text/javascript" th:inline="javascript">		
+		//init
+		$(function(){
+			//总页数
+			var totalPage = [[${pEquipment.totalPages}]];
+			//总数据条数
+			var totalRecords = [[${pEquipment.number}]];
+			//当前页
+			var pageNo = [[${equipmentSearchForm.pno}+1]];
+			//生成分页
+			//有些参数是可选的，比如lang，若不传有默认值
+			kkpager.generPageHtml({
+				pno : pageNo,
+				//总页码
+				total : totalPage,
+				//总数据条数
+				totalRecords : totalRecords,
+				//链接前部
+				hrefFormer : 'allEquipment',
+				//链接尾部
+				hrefLatter : '',
+				mode : 'click',//默认值是link，可选link或者click
+				click : function(n){
+				  this.selectPage(n);
+				  $("#fpno").attr("value",n);//推荐这种写法,可正常赋值
+				  $("#equipmentSearchForm").submit();//提交form表单
+				  return false;
+				}
+			});
+		});
+</script>
+	<script th:src="@{/js/file.js}"></script>
+</body>
+</html>
