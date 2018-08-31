@@ -8,9 +8,9 @@ import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfig
 	      JpaRepositoriesAutoConfiguration.class//禁止springboot自动加载持久化bean
 	        })  
 @SpringBootApplication
-public class BMDBApplication {
+public class DataMigrationApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(BMDBApplication.class, args);
+		SpringApplication.run(DataMigrationApplication.class, args);
 	}
 }
